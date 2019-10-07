@@ -35,16 +35,16 @@ The hyper-parameter choice is crucial for performance (both speed and accuracy),
 however varies for different applications. 
 The main choices to make are:
 
-    * architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)
+* architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)
 	
-    * the training algorithm: hierarchical softmax (better for infrequent words) 
+* the training algorithm: hierarchical softmax (better for infrequent words) 
 	vs negative sampling (better for frequent words, better with low dimensional vectors)
 	
-    * sub-sampling of frequent words: can improve both accuracy and speed for large data sets 
+* sub-sampling of frequent words: can improve both accuracy and speed for large data sets 
 	(useful values are in range 1e-3 to 1e-5)
     
-	* dimensionality of the word vectors: usually more is better, but not always
+* dimensionality of the word vectors: usually more is better, but not always
     
-	* context (window) size: for skip-gram usually around 10, for CBOW around 5
+* context (window) size: for skip-gram usually around 10, for CBOW around 5
 	
 	
