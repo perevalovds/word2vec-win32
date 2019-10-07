@@ -18,7 +18,8 @@
 #include <malloc.h>
 
 #define max_size 2000  // max length of strings
-#define N 5
+#define N 10
+//5
 //40           // number of closest words that will be shown
 #define max_w 500
 //50       // max length of vocabulary entries
