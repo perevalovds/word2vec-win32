@@ -18,8 +18,10 @@
 #include <malloc.h>
 
 #define max_size 2000  // max length of strings
-#define N 40           // number of closest words that will be shown
-#define max_w 50       // max length of vocabulary entries
+#define N 5
+//40           // number of closest words that will be shown
+#define max_w 500
+//50       // max length of vocabulary entries
 
 int main(int argc, char **argv) {
   FILE *f;
@@ -69,7 +71,8 @@ int main(int argc, char **argv) {
   while (1) {
     for (a = 0; a < N; a++) bestd[a] = 0;
     for (a = 0; a < N; a++) bestw[a][0] = 0;
-    printf("Enter three words (EXIT to break), they will be used as X-Y+Z: ");
+    printf("Enter three words, they will be used as X-Y+Z (EXIT to break), you may use word 0 (man god 0)\n: ");
+	//Note: in original version it was -X + Y + Z!
     a = 0;
     while (1) {
       st1[a] = fgetc(stdin);
@@ -103,6 +106,11 @@ int main(int argc, char **argv) {
           cn);
       continue;
     }
+
+	//search words in vocabulary and summing to 'vec'
+	for (a = 0; a < size; a++) {
+		vec[a] = 0;
+	}
     for (a = 0; a < cn; a++) {
       for (b = 0; b < words; b++)
         if (!strcmp(&vocab[b * max_w], st[a])) break;
@@ -110,32 +118,44 @@ int main(int argc, char **argv) {
       bi[a] = b;
       printf("\nWord: %s  Position in vocabulary: %lld\n", st[a], bi[a]);
       if (b == 0) {
-        printf("Out of dictionary word!\n");
-        break;
+        printf("(not in dictionary)\n");
+        //break;
       }
+	  else {
+		  //X - Y + Z
+		  int sign = (a % 2 == 0) ? 1 : -1;
+		  for (int i = 0; i < size; i++) {
+		  	vec[i] += sign * M[i + b * size];
+		  }
+
+	  }
     }
-    if (b == 0) continue;
+    //if (b == 0) continue;
     printf(
         "\n                                              Word              "
         "Distance\n------------------------------------------------------------"
         "------------\n");
-    for (a = 0; a < size; a++)
-      vec[a] = M[a + bi[1] * size] - M[a + bi[0] * size] + M[a + bi[2] * size];
-    len = 0;
+	//for (a = 0; a < size; a++) {
+	//	vec[a] = M[a + bi[1] * size] - M[a + bi[0] * size] + M[a + bi[2] * size]; //Wow, 0 word with "-" !! 
+	//}
+	
+	len = 0;
     for (a = 0; a < size; a++) len += vec[a] * vec[a];
     len = sqrt(len);
     for (a = 0; a < size; a++) vec[a] /= len;
     for (a = 0; a < N; a++) bestd[a] = 0;
     for (a = 0; a < N; a++) bestw[a][0] = 0;
     for (c = 0; c < words; c++) {
-      if (c == bi[0]) continue;
-      if (c == bi[1]) continue;
-      if (c == bi[2]) continue;
-      a = 0;
+      //if (c == bi[0]) continue;
+      //if (c == bi[1]) continue;
+      //if (c == bi[2]) continue;
+      //check for the same words
+	  a = 0;
       for (b = 0; b < cn; b++)
         if (bi[b] == c) a = 1;
       if (a == 1) continue;
-      dist = 0;
+
+	  dist = 0;
       for (a = 0; a < size; a++) dist += vec[a] * M[a + c * size];
       for (a = 0; a < N; a++) {
         if (dist > bestd[a]) {
